@@ -148,7 +148,61 @@ describe 'Items API' do
     end
 
     describe 'sad path' do
-      it
+      it 'returns a 400 status code and a empty item hash when an invalid info is provided for an item' do
+        merchant = create(:merchant)
+        item_params = {
+          name: 'Motivational Cross Stitch',
+          unit_price: 5.99,
+          merchant_id: merchant.id
+        }
+
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+        item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(400)
+
+        expect(item).to have_key(:status)
+        expect(item[:status]).to be_a(String)
+
+        expect(item).to have_key(:error)
+        expect(item[:error]).to be_a(Hash)
+
+        expect(item[:error]).to have_key(:id)
+        expect(item[:error][:id]).to be(nil)
+
+        expect(item[:error]).to have_key(:type)
+        expect(item[:error][:type]).to be_a(String)
+      end
+
+      it 'returns a 424 status code and a empty item hash when an invalid merchant id is provided when creating a item' do
+        item_params = {
+          name: 'Motivational Cross Stitch',
+          description: 'Handmade cross stich picture with a motivational quote',
+          unit_price: 5.99,
+          merchant_id: 1
+        }
+
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+        item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(424)
+
+        expect(item).to have_key(:status)
+        expect(item[:status]).to be_a(String)
+
+        expect(item).to have_key(:error)
+        expect(item[:error]).to be_a(Hash)
+
+        expect(item[:error]).to have_key(:id)
+        expect(item[:error][:id]).to be(nil)
+
+        expect(item[:error]).to have_key(:type)
+        expect(item[:error][:type]).to be_a(String)
+      end
     end
   end
 
