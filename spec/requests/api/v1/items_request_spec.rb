@@ -3,7 +3,7 @@ require 'rails_helper'
 describe "Items API" do
   describe 'happy paths' do
     it "sends a list of all items" do
-      x = create_list(:item, 5)
+      create_list(:item, 5)
 
       get '/api/v1/items'
 
@@ -63,6 +63,15 @@ describe "Items API" do
 
       expect(item[:data][:attributes]).to have_key(:name)
       expect(item[:data][:attributes][:name]).to be_a(String)
+      
+      expect(item[:data][:attributes]).to have_key(:description)
+      expect(item[:data][:attributes][:description]).to be_a(String)
+
+      expect(item[:data][:attributes]).to have_key(:unit_price)
+      expect(item[:data][:attributes][:unit_price]).to be_a(Float)
+
+      expect(item[:data][:attributes]).to have_key(:merchant_id)
+      expect(item[:data][:attributes][:merchant_id]).to be_a(Integer)
 
       expect(item[:data]).to_not have_key(:created_at)
       expect(item[:data]).to_not have_key(:updated_at)
