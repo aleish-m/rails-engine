@@ -8,7 +8,7 @@ class Api::V1::ItemsController < ApplicationController
       item = Item.find(params[:id])
       render json: ItemSerializer.single_item(item)
     else
-      render json: ItemSerializer.no_item, status: :not_found
+      render json: ItemSerializer.no_item(404), status: :not_found
     end
   end
 
@@ -17,7 +17,12 @@ class Api::V1::ItemsController < ApplicationController
     if item.save
       render json: ItemSerializer.single_item(item), status: :created
     else
-      render json: ItemSerializer.no_item, status: :bad_request
+      if Merchant.exists?(id: item_params[:merchant_id])
+        render json: ItemSerializer.no_item(400), status: :bad_request
+      else
+        render json: ItemSerializer.no_item(424), status: :failed_dependency
+      end
+    end
   end
 
   def destroy

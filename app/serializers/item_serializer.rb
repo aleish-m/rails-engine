@@ -31,9 +31,9 @@ class ItemSerializer
     }
   end
 
-  def self.no_item
+  def self.no_item(status)
     {
-      status: '404',
+      status: status.to_s,
       error: {
         id: nil,
         type: Item.name.downcase,
