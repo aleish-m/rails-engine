@@ -135,7 +135,7 @@ describe "Items API" do
         previous_info = Item.last
 
         update_params = {
-          name: 'Siver necklace',
+          name: 'Silver necklace',
           unit_price: 10.50
         }
         headers = {"CONTENT_TYPE" => "application/json"}
@@ -156,7 +156,7 @@ describe "Items API" do
         previous_info = Item.last
 
         update_params = {
-          name: 'Siver necklace',
+          name: 'Silver necklace',
           description: '18 inch brushed silver necklace chain with pendent',
           unit_price: 10.50,
           merchant_id: merchant_id
