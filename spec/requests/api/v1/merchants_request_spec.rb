@@ -61,7 +61,7 @@ describe 'Merchant API' do
 
     it 'can get all items for a given merchant ID' do
       id = create(:merchant).id
-      items = create_list(:item, 5, merchant_id: id)
+      create_list(:item, 5, merchant_id: id)
 
       get "/api/v1/merchants/#{id}/items"
 

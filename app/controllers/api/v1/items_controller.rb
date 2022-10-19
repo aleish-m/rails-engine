@@ -1,4 +1,4 @@
-class Api::V1::ItemsController < ApplicationController 
+class Api::V1::ItemsController < ApplicationController
   def index
     render json: ItemSerializer.all_items(Item.all)
   end
@@ -20,7 +20,7 @@ class Api::V1::ItemsController < ApplicationController
   def update
     item = Item.find(params[:id])
     item.update(item_params)
-    render json: ItemSerializer.single_item(item) 
+    render json: ItemSerializer.single_item(item)
   end
 
   private

@@ -1,14 +1,13 @@
-class MerchantSerializer 
-
+class MerchantSerializer
   def self.all_merchants(merchants)
     {
       data: merchants.map do |merchant|
         {
-         id: merchant.id.to_s,
-         type: merchant.class.name.downcase,
-         attributes: {
-          name: merchant.name
-         }
+          id: merchant.id.to_s,
+          type: merchant.class.name.downcase,
+          attributes: {
+            name: merchant.name
+          }
         }
       end
     }
@@ -17,12 +16,12 @@ class MerchantSerializer
   def self.single_merchant(merchant)
     {
       data: {
-         id: merchant.id.to_s,
-         type: merchant.class.name.downcase,
-         attributes: {
+        id: merchant.id.to_s,
+        type: merchant.class.name.downcase,
+        attributes: {
           name: merchant.name
-         }
         }
+      }
     }
   end
 
@@ -30,12 +29,12 @@ class MerchantSerializer
     {
       status: '404',
       error: {
-         id: nil,
-         type: Merchant.name.downcase,
-         attributes: {
+        id: nil,
+        type: Merchant.name.downcase,
+        attributes: {
           name: ''
-         }
         }
+      }
     }
   end
 
