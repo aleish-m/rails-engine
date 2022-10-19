@@ -184,7 +184,7 @@ describe "Items API" do
     it "gets the merchant data for a given item" do
       id = create(:item).id
 
-      get "/api/v1/items/#{id}/merchants"
+      get "/api/v1/items/#{id}/merchant"
 
       item_merchant = JSON.parse(response.body, symbolize_names: true)
 
