@@ -92,7 +92,7 @@ describe "Items API" do
 
       created_item = Item.last
 
-      expect(response).to be_successful
+      expect(response).to have_http_status(201)
 
       expect(created_item.name).to eq(item_params[:name])
       expect(created_item.description).to eq(item_params[:description])
@@ -101,7 +101,7 @@ describe "Items API" do
 
     end
 
-    it 'can destoy an item' do 
+    it 'can destroy an item' do 
       id = create(:item).id
 
       expect(Item.count).to eq(1)
@@ -111,7 +111,7 @@ describe "Items API" do
       expect(response).to be_successful
 
       expect(Item.count).to eq(0)
-      expect(Item.find(id)).to raise_error(ActiveRecord::RecordNotFound)
+      expect{Item.find(id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
