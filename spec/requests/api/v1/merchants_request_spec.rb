@@ -65,14 +65,14 @@ describe 'Merchant API' do
 
       get "/api/v1/merchants/#{id}/items"
 
-      merchant = JSON.parse(response.body, symbolize_names: true)
+      merchant_items = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_successful
 
-      expect(merchant).to have_key(:data)
-      expect(merchant[:data]).to be_an(Array)
+      expect(merchant_items).to have_key(:data)
+      expect(merchant_items[:data]).to be_an(Array)
 
-      merchant[:data].each do |item|
+      merchant_items[:data].each do |item|
         expect(item).to have_key(:id)
         expect(item[:id]).to be_a(String)
 
