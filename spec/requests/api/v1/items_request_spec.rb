@@ -113,5 +113,73 @@ describe "Items API" do
       expect(Item.count).to eq(0)
       expect{Item.find(id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
+
+    describe 'can update an existing item' do
+      it 'can update only one part of an items information' do
+        id = create(:item).id
+        previous_name = Item.last.name
+
+        update_params = { name: 'Silver necklace'}
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: update_params})
+        item = Item.find(id)
+
+        expect(response).to be_successful
+        expect(item.name).to_not eq (previous_name)
+        expect(item.name).to eq ('Silver necklace')
+      end
+
+      it 'can update multiple peices of item information' do
+        id = create(:item).id
+        previous_info = Item.last
+
+        update_params = {
+          name: 'Siver necklace',
+          unit_price: 10.50
+        }
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: update_params})
+        item = Item.find(id)
+
+        expect(response).to be_successful
+        expect(item.name).to_not eq (previous_info.name)
+        expect(item.name).to eq ('Silver necklace')
+        expect(item.unit_price).to_not eq (previous_info.unit_price)
+        expect(item.unit_price).to eq (10.50)
+      end
+
+      it "can update all attributes of an item's information" do
+        item_id = create(:item).id
+        merchant_id = create(:merchant).id
+        previous_info = Item.last
+
+        update_params = {
+          name: 'Siver necklace',
+          description: '18 inch brushed silver necklace chain with pendent',
+          unit_price: 10.50,
+          merchant_id: merchant_id
+        }
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        patch "/api/v1/items/#{item_id}", headers: headers, params: JSON.generate({item: update_params})
+        item = Item.find(item_id)
+
+        expect(response).to be_successful
+        expect(item.name).to_not eq (previous_info.name)
+        expect(item.name).to eq ('Silver necklace')
+
+        expect(item.description).to_not eq (previous_info.description)
+        expect(item.description).to eq ('18 inch brushed silver necklace chain with pendent')
+
+        expect(item.unit_price).to_not eq (previous_info.unit_price)
+        expect(item.unit_price).to eq (10.50)
+
+        expect(item.merchant_id).to_not eq (previous_info.merchant_id)
+        expect(item.merchant_id).to eq (merchant_id)
+      end
+    end
+
   end
 end
