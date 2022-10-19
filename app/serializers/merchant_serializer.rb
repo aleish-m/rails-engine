@@ -19,8 +19,8 @@ class MerchantSerializer
         id: merchant.id.to_s,
         type: merchant.class.name.downcase,
         attributes: {
-          name: merchant.name
-        }
+            name: merchant.name
+          }
       }
     }
   end
@@ -30,10 +30,7 @@ class MerchantSerializer
       status: '404',
       error: {
         id: nil,
-        type: Merchant.name.downcase,
-        attributes: {
-          name: ''
-        }
+        type: Merchant.name.downcase
       }
     }
   end
@@ -43,13 +40,7 @@ class MerchantSerializer
       status: '404',
       error: [{
         id: nil,
-        type: Item.name.downcase,
-        attributes: {
-          name: '',
-          description: '',
-          unit_price: nil,
-          merchant_id: nil
-        }
+        type: Item.name.downcase
       }]
     }
   end
