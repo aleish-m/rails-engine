@@ -9,9 +9,12 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def create
-    # require "pry"; binding.pry
     item = Item.create!(item_params)
-    render json: ItemSerializer.single_item(item)
+    render json: ItemSerializer.single_item(item), status: :created
+  end
+
+  def destroy
+    render json: Item.delete(params[:id])
   end
 
   private
