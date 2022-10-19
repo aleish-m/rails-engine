@@ -216,7 +216,7 @@ describe 'Items API' do
 
         delete "/api/v1/items/#{id}"
 
-        expect(response).to be_successful
+        expect(response).to have_http_status(204)
 
         expect(Item.count).to eq(0)
         expect { Item.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -224,7 +224,24 @@ describe 'Items API' do
     end
 
     describe 'sad path' do
-      it
+      it "returns a error hash for item when trying ot delete an item that does not exist in db" do
+        delete "/api/v1/items/2"
+        item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(400)
+
+        expect(item).to have_key(:status)
+        expect(item[:status]).to be_a(String)
+
+        expect(item).to have_key(:error)
+        expect(item[:error]).to be_a(Hash)
+
+        expect(item[:error]).to have_key(:id)
+        expect(item[:error][:id]).to be(nil)
+
+        expect(item[:error]).to have_key(:type)
+        expect(item[:error][:type]).to be_a(String)
+      end
     end
   end
 
