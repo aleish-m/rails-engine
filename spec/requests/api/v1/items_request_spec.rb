@@ -380,7 +380,7 @@ describe 'Items API' do
 
       end
 
-      it 'returns a 400 status code and a empty item hash when an invalid merchant id is provided when creating a item' do
+      it 'returns a 400 status code and a original item hash when an invalid merchant id is provided when creating a item' do
         item_id = create(:item).id
         merchant_id = create(:merchant).id
         previous_info = Item.last
@@ -394,8 +394,10 @@ describe 'Items API' do
         headers = { 'CONTENT_TYPE' => 'application/json' }
 
         patch "/api/v1/items/#{item_id}", headers: headers, params: JSON.generate({ item: update_params })
-
+          
         item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(400)
 
         expect(item[:data][:attributes][:name]).to eq(previous_info.name)
         expect(item[:data][:attributes][:name]).to_not eq('Silver necklace')
