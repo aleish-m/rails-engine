@@ -316,7 +316,99 @@ describe 'Items API' do
     end
 
     describe 'sad path' do
-      it
+      it 'returns a 404 status code and a empty item hash when an invalid item id is provided for an item' do
+        create(:item)
+        merchant_id = create(:merchant).id
+        previous_info = Item.last
+
+        update_params = {
+          name: 'Silver necklace',
+          description: '18 inch brushed silver necklace chain with pendent',
+          unit_price: 10.50,
+          merchant_id: merchant_id
+          }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch "/api/v1/items/2", headers: headers, params: JSON.generate({ item: update_params })
+
+        item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(404)
+        expect(item).to have_key(:status)
+        expect(item[:status]).to be_a(String)
+
+        expect(item).to have_key(:error)
+        expect(item[:error]).to be_a(Hash)
+
+        expect(item[:error]).to have_key(:id)
+        expect(item[:error][:id]).to be(nil)
+
+        expect(item[:error]).to have_key(:type)
+        expect(item[:error][:type]).to be_a(String)
+      end
+
+      it 'returns a 400 status code and original item info if invalid info is provided for an item' do
+        item_id = create(:item).id
+        merchant_id = create(:merchant).id
+        previous_info = Item.last
+
+        update_params = {
+          name: 'Silver necklace',
+          description: '',
+          unit_price: 10.50,
+          merchant_id: merchant_id
+          }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch "/api/v1/items/#{item_id}", headers: headers, params: JSON.generate({ item: update_params })
+
+        item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(400)
+
+        expect(item[:data][:attributes][:name]).to eq(previous_info.name)
+        expect(item[:data][:attributes][:name]).to_not eq('Silver necklace')
+
+        expect(item[:data][:attributes][:description]).to eq(previous_info.description)
+        expect(item[:data][:attributes][:description]).to_not eq('')
+
+        expect(item[:data][:attributes][:unit_price]).to eq(previous_info.unit_price)
+        expect(item[:data][:attributes][:unit_price]).to_not eq(10.50)
+
+        expect(item[:data][:attributes][:merchant_id]).to eq(previous_info.merchant_id)
+        expect(item[:data][:attributes][:merchant_id]).to_not eq(merchant_id)
+
+      end
+
+      it 'returns a 400 status code and a empty item hash when an invalid merchant id is provided when creating a item' do
+        item_id = create(:item).id
+        merchant_id = create(:merchant).id
+        previous_info = Item.last
+
+        update_params = {
+          name: 'Silver necklace',
+          description: '18 inch brushed silver necklace chain with pendent',
+          unit_price: 10.50,
+          merchant_id: 20
+          }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch "/api/v1/items/#{item_id}", headers: headers, params: JSON.generate({ item: update_params })
+
+        item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(item[:data][:attributes][:name]).to eq(previous_info.name)
+        expect(item[:data][:attributes][:name]).to_not eq('Silver necklace')
+
+        expect(item[:data][:attributes][:description]).to eq(previous_info.description)
+        expect(item[:data][:attributes][:description]).to_not eq('')
+
+        expect(item[:data][:attributes][:unit_price]).to eq(previous_info.unit_price)
+        expect(item[:data][:attributes][:unit_price]).to_not eq(10.50)
+
+        expect(item[:data][:attributes][:merchant_id]).to eq(previous_info.merchant_id)
+        expect(item[:data][:attributes][:merchant_id]).to_not eq(merchant_id)
+      end
     end
   end
 

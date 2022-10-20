@@ -34,9 +34,16 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
-    item = Item.find(params[:id])
-    item.update(item_params)
-    render json: ItemSerializer.single_item(item)
+    if Item.exists?(id: params[:id])
+      item = Item.find(params[:id])
+      if item.update(item_params)
+        render json: ItemSerializer.single_item(item)
+      else
+        render json: ItemSerializer.single_item(Item.find(params[:id])), status: :bad_request
+      end
+    else
+      render json: ItemSerializer.no_item(404), status: :not_found
+    end
   end
 
   private
