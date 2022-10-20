@@ -41,7 +41,7 @@ class ItemSerializer
     }
   end
 
-    def self.no_merchant_items
+  def self.no_merchant_items
     {
       status: '404',
       error: [{
