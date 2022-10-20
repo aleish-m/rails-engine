@@ -26,7 +26,11 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    render json: Item.delete(params[:id])
+    if Item.exists?(id: params[:id])
+      Item.destroy(params[:id])
+    else
+      render json: ItemSerializer.no_item(400), status: :bad_request
+    end
   end
 
   def update
