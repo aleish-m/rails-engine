@@ -441,7 +441,25 @@ describe 'Items API' do
     end
 
     describe 'sad path' do
-      it
+      it 'returns a empty items merchant data hash when a invalid item id is requested' do
+        get '/api/v1/items/1/merchant'
+
+        item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(404)
+
+        expect(item).to have_key(:status)
+        expect(item[:status]).to be_a(String)
+
+        expect(item).to have_key(:error)
+        expect(item[:error]).to be_a(Hash)
+
+        expect(item[:error]).to have_key(:id)
+        expect(item[:error][:id]).to be(nil)
+
+        expect(item[:error]).to have_key(:type)
+        expect(item[:error][:type]).to be_a(String)
+      end
     end
   end
 end
