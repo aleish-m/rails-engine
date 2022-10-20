@@ -4,23 +4,46 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def show
-    item = Item.find(params[:id])
-    render json: ItemSerializer.single_item(item)
+    if Item.exists?(id: params[:id])
+      item = Item.find(params[:id])
+      render json: ItemSerializer.single_item(item)
+    else
+      render json: ItemSerializer.no_item(404), status: :not_found
+    end
   end
 
   def create
-    item = Item.create!(item_params)
-    render json: ItemSerializer.single_item(item), status: :created
+    item = Item.new(item_params)
+    if item.save
+      render json: ItemSerializer.single_item(item), status: :created
+    else
+      if Merchant.exists?(id: item_params[:merchant_id])
+        render json: ItemSerializer.no_item(400), status: :bad_request
+      else
+        render json: ItemSerializer.no_item(424), status: :failed_dependency
+      end
+    end
   end
 
   def destroy
-    render json: Item.delete(params[:id])
+    if Item.exists?(id: params[:id])
+      Item.destroy(params[:id])
+    else
+      render json: ItemSerializer.no_item(400), status: :bad_request
+    end
   end
 
   def update
-    item = Item.find(params[:id])
-    item.update(item_params)
-    render json: ItemSerializer.single_item(item)
+    if Item.exists?(id: params[:id])
+      item = Item.find(params[:id])
+      if item.update(item_params)
+        render json: ItemSerializer.single_item(item)
+      else
+        render json: ItemSerializer.single_item(Item.find(params[:id])), status: :bad_request
+      end
+    else
+      render json: ItemSerializer.no_item(404), status: :not_found
+    end
   end
 
   private

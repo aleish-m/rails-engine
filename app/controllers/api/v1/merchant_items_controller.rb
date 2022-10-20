@@ -5,7 +5,7 @@ class Api::V1::MerchantItemsController < ApplicationController
       merchant = Merchant.find(params[:merchant_id])
       render json: ItemSerializer.all_items(merchant.items)
     else
-      render json:MerchantSerializer.no_merchant_items, status: :not_found
+      render json:ItemSerializer.no_merchant_items, status: :not_found
     end
   end
   
