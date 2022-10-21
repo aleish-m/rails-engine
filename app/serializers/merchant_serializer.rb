@@ -25,12 +25,24 @@ class MerchantSerializer
     }
   end
 
-  def self.no_merchant
+  def self.no_merchant(status)
     {
-      status: '404',
+      status: status.to_s,
       error: {
         id: nil,
         type: Merchant.name.downcase
+      }
+    }
+  end
+
+  def self.no_merchant_found
+    {
+      data: {
+        id: nil,
+        type: Merchant.name.downcase,
+        attributes: {
+            name: ''
+          }
       }
     }
   end
