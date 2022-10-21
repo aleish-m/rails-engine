@@ -51,17 +51,17 @@ class ItemSerializer
     }
   end
 
-  def self.no_items
+  def self.no_items_found
     {
       data: [
         {
-          id: item.id.to_s,
-          type: item.class.name.downcase,
+          id: nil,
+          type: '',
           attributes: {
-            name: item.name,
-            description: item.description,
-            unit_price: item.unit_price,
-            merchant_id: item.merchant_id
+            name: '',
+            description: '',
+            unit_price: nil,
+            merchant_id: nil
           }
         }
       ]
