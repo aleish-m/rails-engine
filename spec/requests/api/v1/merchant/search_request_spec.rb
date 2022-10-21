@@ -79,6 +79,29 @@ describe 'Merchant Search API' do
         expect(merchant[:error]).to have_key(:type)
         expect(merchant[:error][:type]).to be_a(String)
       end
+
+      it 'returns a 400 status code and a merchant error hash when parameter missing' do
+        merchant_1 = create(:merchant, name: 'Ring World')
+        merchant_2 = create(:merchant, name: 'All the Pretty Rings')
+
+        get '/api/v1/merchants/find?'
+
+        merchant = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(400)
+
+        expect(merchant).to have_key(:status)
+        expect(merchant[:status]).to be_a(String)
+
+        expect(merchant).to have_key(:error)
+        expect(merchant[:error]).to be_a(Hash)
+
+        expect(merchant[:error]).to have_key(:id)
+        expect(merchant[:error][:id]).to be(nil)
+
+        expect(merchant[:error]).to have_key(:type)
+        expect(merchant[:error][:type]).to be_a(String)
+      end
     end
   end
 end
