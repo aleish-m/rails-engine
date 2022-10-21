@@ -54,16 +54,6 @@ class ItemSerializer
   def self.no_items_found
     {
       data: [
-        {
-          id: nil,
-          type: '',
-          attributes: {
-            name: '',
-            description: '',
-            unit_price: nil,
-            merchant_id: nil
-          }
-        }
       ]
     }
   end
