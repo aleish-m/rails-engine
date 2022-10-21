@@ -10,10 +10,10 @@ class Api::V1::Items::SearchController < ApplicationController
         render json: ItemSerializer.all_items(items)
       end
     elsif price_search_params.values.present? && !name_search_params.present?
+      items = Item.search_price(price_search_params)
       if items.count == 0
         render json: ItemSerializer.no_items_found
       else
-        items = Item.search_price(price_search_params)
         render json: ItemSerializer.all_items(items)
       end
     else
