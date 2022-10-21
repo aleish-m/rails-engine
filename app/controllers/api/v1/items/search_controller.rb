@@ -17,7 +17,7 @@ class Api::V1::Items::SearchController < ApplicationController
         render json: ItemSerializer.all_items(items)
       end
     else
-      render json: ItemSerializer.no_items_found
+      render json: ItemSerializer.no_item(400), status: :bad_request
     end
   end
 
