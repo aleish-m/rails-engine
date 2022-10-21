@@ -205,7 +205,7 @@ describe 'Item Search API' do
         end
       end
 
-      it 'returns a successful status code and a item error array when name parameter is empty' do
+      it 'returns a 400 status code and a item error array when name parameter is empty' do
         item_1 = create(:item, name: 'Ring World')
         item_2 = create(:item, name: 'All the Pretty Rings')
         item_3 = create(:item, name: 'Pretty Silver Candle')
@@ -213,39 +213,24 @@ describe 'Item Search API' do
 
         get '/api/v1/items/find_all?name='
 
-        items = JSON.parse(response.body, symbolize_names: true)
+        item = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response).to be_successful
+        expect(response).to have_http_status(400)
 
-        expect(items).to have_key(:data)
-        expect(items[:data]).to be_a(Array)
-        expect(items[:data].count).to be(1)
+        expect(item).to have_key(:status)
+        expect(item[:status]).to be_a(String)
 
-        items[:data].each do |item|
-          expect(item).to have_key(:id)
-          expect(item[:id]).to be(nil)
+        expect(item).to have_key(:error)
+        expect(item[:error]).to be_a(Hash)
 
-          expect(item).to have_key(:type)
-          expect(item[:type]).to be_a(String)
+        expect(item[:error]).to have_key(:id)
+        expect(item[:error][:id]).to be(nil)
 
-          expect(item).to have_key(:attributes)
-          expect(item[:attributes]).to be_a(Hash)
-
-          expect(item[:attributes]).to have_key(:name)
-          expect(item[:attributes][:name]).to be_a(String)
-
-          expect(item[:attributes]).to have_key(:description)
-          expect(item[:attributes][:description]).to be_a(String)
-
-          expect(item[:attributes]).to have_key(:unit_price)
-          expect(item[:attributes][:unit_price]).to be(nil)
-
-          expect(item[:attributes]).to have_key(:merchant_id)
-          expect(item[:attributes][:merchant_id]).to be(nil)
-        end
+        expect(item[:error]).to have_key(:type)
+        expect(item[:error][:type]).to be_a(String)
       end
 
-      it 'returns a successful status code and a item error array when parameter missing' do
+      it 'returns a 400 status code and a item error array when parameter missing' do
         item_1 = create(:item, name: 'Ring World')
         item_2 = create(:item, name: 'All the Pretty Rings')
         item_3 = create(:item, name: 'Pretty Silver Candle')
@@ -253,36 +238,46 @@ describe 'Item Search API' do
 
         get '/api/v1/items/find_all'
 
-        items = JSON.parse(response.body, symbolize_names: true)
+        item = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response).to be_successful
+        expect(response).to have_http_status(400)
 
-        expect(items).to have_key(:data)
-        expect(items[:data]).to be_a(Array)
-        expect(items[:data].count).to be(1)
+        expect(item).to have_key(:status)
+        expect(item[:status]).to be_a(String)
 
-        items[:data].each do |item|
-          expect(item).to have_key(:id)
-          expect(item[:id]).to be(nil)
+        expect(item).to have_key(:error)
+        expect(item[:error]).to be_a(Hash)
 
-          expect(item).to have_key(:type)
-          expect(item[:type]).to be_a(String)
+        expect(item[:error]).to have_key(:id)
+        expect(item[:error][:id]).to be(nil)
 
-          expect(item).to have_key(:attributes)
-          expect(item[:attributes]).to be_a(Hash)
+        expect(item[:error]).to have_key(:type)
+        expect(item[:error][:type]).to be_a(String)
+      end
 
-          expect(item[:attributes]).to have_key(:name)
-          expect(item[:attributes][:name]).to be_a(String)
+      it 'returns a 400 status code and a item error array when parameter missing' do
+        item_1 = create(:item)
+        item_2 = create(:item)
+        item_3 = create(:item)
+        item_4 = create(:item)
 
-          expect(item[:attributes]).to have_key(:description)
-          expect(item[:attributes][:description]).to be_a(String)
+        get '/api/v1/items/find_all?name=ring&min_price=50'
 
-          expect(item[:attributes]).to have_key(:unit_price)
-          expect(item[:attributes][:unit_price]).to be(nil)
+        item = JSON.parse(response.body, symbolize_names: true)
 
-          expect(item[:attributes]).to have_key(:merchant_id)
-          expect(item[:attributes][:merchant_id]).to be(nil)
-        end
+        expect(response).to have_http_status(400)
+
+        expect(item).to have_key(:status)
+        expect(item[:status]).to be_a(String)
+
+        expect(item).to have_key(:error)
+        expect(item[:error]).to be_a(Hash)
+
+        expect(item[:error]).to have_key(:id)
+        expect(item[:error][:id]).to be(nil)
+
+        expect(item[:error]).to have_key(:type)
+        expect(item[:error][:type]).to be_a(String)
       end
     end
   end
