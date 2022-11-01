@@ -19,33 +19,35 @@ This API also has a front facing application that consumes it. That is located [
 ![spring](https://img.shields.io/gem/v/spring?color=blue&label=spring)
 ![faker](https://img.shields.io/gem/v/faker?color=blue&label=faker)
 ![factory bot](https://img.shields.io/gem/v/factory_bot_rails?color=blue&label=factory_bot_rails)
-![jsonapi-serializer](https://img.shields.io/gem/v/jsonapi-serializer?color=blue&label=jsonapi-serializer)
 ![pry](https://img.shields.io/gem/v/pry?color=blue&label=pry)
 
 ## Set Up
 - Clone this repo
-- `bundle install`
-- `rails s`
+  - `bundle install`
+  - `rails s`
+- Database set up
+  - `rails db:{create,migrate,seed}`
+  - `rails db:schema:dump`
 
 Visit the [front-end application](https://github.com/aleish-m/rails_engine_fe) to begin front-end setup.
 
-## Database Creation
-- `rails db:{create,migrate,seed}`
-- `rails db:schema:dump`
+## Deployment
+- In terminal (apple or integrated)
+    * `rails s`
+- Navigate to desired API endpoint as noted below
+
+## Running Test Suite Instructions
+
+- Clone this repo
+- In terminal (apple or integrated)
+    * `bundle install`
+    * `rails db:{create,migrate,seed}`
+    * `rails db:schema:dump`
+    * `bundle exec rspec`
 
 ## Database Structure
 
-![database](images/db_schema.png)
-
-## Deployment
-- `rails s`
-
-## Testing Instructions
-
-- Clone this repo
-- in terminal (apple or integrated)
-    * bundle install
-    * bundle exec rspec
+![image](https://user-images.githubusercontent.com/105686836/199165142-119b99f8-4920-4eb5-9733-ed8bf6908523.png)
 
 ## End Points
 
